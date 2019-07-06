@@ -16,22 +16,22 @@ def parse_opt():
                     help='')
     parser.add_argument('--input_json', type=str, default='',
                     help='path to the json file containing additional info and vocab')
-    parser.add_argument('--input_dic', type=str, default='./data/anet/dic_anet.json',
+    parser.add_argument('--input_dic', type=str, default='',
                     help='path to the json containing the preprocessed dataset')
     parser.add_argument('--input_raw_cap', type=str, default='',
                     help='path to ActivityNet Captions dataset file')
     parser.add_argument('--image_path', type=str, default='',
                     help='path to the h5file containing the image data') 
-    parser.add_argument('--proposal_h5', type=str, default='./data/anet/anet_detection_vg_fc6_feat_100rois.h5',
+    parser.add_argument('--proposal_h5', type=str, default='',
                     help='path to the json containing the detection result.') 
-    parser.add_argument('--feature_root', type=str, default='./data/anet/fc6_feat_100rois',
+    parser.add_argument('--feature_root', type=str, default='',
                     help='path to the npy flies containing region features')
-    parser.add_argument('--seg_feature_root', type=str, default='./data/anet/rgb_motion_1d',
+    parser.add_argument('--seg_feature_root', type=str, default='',
                     help='path to the npy files containing frame-wise features')
 
-    parser.add_argument('--num_workers', type=int, default=0,
+    parser.add_argument('--num_workers', type=int, default=20,
                     help='number of worker to load data')
-    parser.add_argument('--cuda', default=True,
+    parser.add_argument('--cuda', action='store_true',
                     help='whether use cuda')
     parser.add_argument('--mGPUs', action='store_true',
                     help='whether use multiple GPUs')
@@ -48,7 +48,7 @@ def parse_opt():
     parser.add_argument('--fc_feat_size', type=int, default=3072,
                     help='2048 for resnet, 4096 for vgg')
     parser.add_argument('--att_feat_size', type=int, default=2048,
-                    help='2048 for resnet, 512 for vgg')   # region feature dim
+                    help='2048 for resnet, 512 for vgg')
     parser.add_argument('--t_attn_size', type=int, default=480, help='number of frames sampled for temopral attention')
     parser.add_argument('--num_sampled_frm', type=int, default=10)
     parser.add_argument('--num_prop_per_frm', type=int, default=100)
@@ -66,7 +66,7 @@ def parse_opt():
                     help='options: dp|add|cat|mix, dp stands for dot-product, add for additive, cat for concat, mix indicates dp for grd. and add for attn., mix_mul indicates dp for grd. and element-wise multiplication for attn.')
 
     parser.add_argument('--enable_BUTD', action='store_true', help='if enable, the region feature will not include location embedding nor class encoding')
-    parser.add_argument('--obj_interact', default=1, help='self-attention encoding for region features')
+    parser.add_argument('--obj_interact', action='store_true', help='self-attention encoding for region features')
     parser.add_argument('--exclude_bgd_det', action='store_true', help='exclude __background__ RoIs')
 
     parser.add_argument('--w_att2', type=float, default=0)
@@ -117,7 +117,7 @@ def parse_opt():
                                               Note: this file contains absolute paths, be careful when moving files around;
                         'model.ckpt-*'      : file(s) with model definition (created by tf)
                     """)
-    parser.add_argument('--id', type=str, default='syy',
+    parser.add_argument('--id', type=str, default='',
                     help='an id identifying this run/job. used in cross-val and appended when writing progress files')
 
     # Evaluation/Checkpointing
@@ -125,7 +125,7 @@ def parse_opt():
                     help='')
     parser.add_argument('--val_split', type=str, default='validation',
                     help='')
-    parser.add_argument('--inference_only', default=0,
+    parser.add_argument('--inference_only', action='store_true',
                     help='')
     parser.add_argument('--densecap_references', type=str, nargs='+', default=['./data/anet/anet_entities_val_1.json', './data/anet/anet_entities_val_2.json'],
                         help='reference files with ground truth captions to compare results against. delimited (,) str')
@@ -133,9 +133,9 @@ def parse_opt():
     parser.add_argument('--grd_reference', type=str, default='tools/anet_entities/data/anet_entities_cleaned_class_thresh50_trainval.json')
     parser.add_argument('--split_file', type=str, default='tools/anet_entities/data/split_ids_anet_entities.json')
 
-    parser.add_argument('--eval_obj_grounding_gt', default=1,
+    parser.add_argument('--eval_obj_grounding_gt', action='store_true',
                     help='whether evaluate object grounding accuracy')
-    parser.add_argument('--eval_obj_grounding', default=1,
+    parser.add_argument('--eval_obj_grounding', action='store_true',
                     help='whether evaluate object grounding accuracy')
     parser.add_argument('--vis_attn', action='store_true', help='visualize attention')
     parser.add_argument('--enable_visdom', action='store_true')
@@ -145,9 +145,9 @@ def parse_opt():
                     help='how many segments to use when periodically evaluating the validation loss? (-1 = all)')
     parser.add_argument('--val_every_epoch', type=int, default=2,
                     help='how many segments to use when periodically evaluating the validation loss? (-1 = all)')
-    parser.add_argument('--checkpoint_path', type=str, default='save/syy',
+    parser.add_argument('--checkpoint_path', type=str, default='save',
                     help='directory to store checkpointed models')
-    parser.add_argument('--language_eval', default=1,
+    parser.add_argument('--language_eval', action='store_true',
                     help='Evaluate language as well (1 = yes, 0 = no)?')
     parser.add_argument('--load_best_score', type=int, default=1,
                     help='Do we load previous best score when resuming training.')       
